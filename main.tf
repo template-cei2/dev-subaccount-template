@@ -112,11 +112,40 @@ resource "btp_subaccount_subscription" "subscriptions" {
 }
 
 ###
-# Assignment of role collection subaccount administrator
+# Assignment of Subaccount Role Collections
 ###
 resource "btp_subaccount_role_collection_assignment" "subaccount_admins" {
-  for_each             = toset(var.subaccount_admins)
+  for_each             = toset(var.subaccount_administrator_users)
   subaccount_id        = btp_subaccount.project.id
   role_collection_name = "Subaccount Administrator"
   user_name            = each.value
+}
+
+resource "btp_subaccount_role_collection_assignment" "subaccount_admins_user_groups" {
+  for_each = {
+    for index, user_group in var.subaccount_administrator_user_groups :
+    index => user_group
+  }
+  subaccount_id        = btp_subaccount.project.id
+  role_collection_name = "Subaccount Administrator"
+  group_name           = each.value.name
+  origin               = each.value.origin
+}
+
+resource "btp_subaccount_role_collection_assignment" "subaccount_viewers" {
+  for_each             = toset(var.subaccount_viewer_users)
+  subaccount_id        = btp_subaccount.project.id
+  role_collection_name = "Subaccount Viewer"
+  user_name            = each.value
+}
+
+resource "btp_subaccount_role_collection_assignment" "subaccount_viewers_user_groups" {
+  for_each = {
+    for index, user_group in var.subaccount_viewer_user_groups :
+    index => user_group
+  }
+  subaccount_id        = btp_subaccount.project.id
+  role_collection_name = "Subaccount Viewer"
+  group_name           = each.value.name
+  origin               = each.value.origin
 }

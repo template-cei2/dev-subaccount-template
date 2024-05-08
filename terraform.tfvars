@@ -44,9 +44,16 @@ cloudfoundry_spaces = ["dev", "test"]
 # Authorization
 #################################
 
-subaccount_admins = ["thomas.smith@acme.com"]
+subaccount_administrator_users = ["thomas.smith@acme.com"]
+subaccount_administrator_user_groups = [
+  {
+    name = "it-admin-team"
+    origin = "acme-idp"
+  }
+]
 
-subaccount_viewers = []
+subaccount_viewer_users = []
+subaccount_viewer_user_groups = []
 
 cloudfoundry_org_users = {
   managers = []

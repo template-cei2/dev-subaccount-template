@@ -124,14 +124,30 @@ variable "cloudfoundry_spaces" {
 # Authorization
 ###
 
-variable "subaccount_admins" {
+variable "subaccount_administrator_users" {
   type = set(string)
   description = "List of users to be assigned the Role Collection 'Subaccount Administrator'."
 }
 
-variable "subaccount_viewers" {
+variable "subaccount_administrator_user_groups" {
+  type = list(object({
+    name   = string
+    origin = string
+  }))
+  description = "List of user groups to be assigned the Role Collection 'Subaccount Administrator'."
+}
+
+variable "subaccount_viewer_users" {
   type = set(string)
-  description = "List of users to be assigned the Role Collection 'Subaccount Administrator'."
+  description = "List of users to be assigned the Role Collection 'Subaccount Viewer'."
+}
+
+variable "subaccount_viewer_user_groups" {
+  type = list(object({
+    name   = string
+    origin = string
+  }))
+  description = "List of user groups to be assigned the Role Collection 'Subaccount Viewer'."
 }
 
 variable "cloudfoundry_org_users" {
@@ -140,5 +156,5 @@ variable "cloudfoundry_org_users" {
     billing_managers = set(string)
     auditors         = set(string)
   })
-  description = "List of users to be assigned the Role Collection 'Subaccount Administrator'."
+  description = "List of users to be assigned to Cloud Foundry roles."
 }

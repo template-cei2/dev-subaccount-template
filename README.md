@@ -9,14 +9,14 @@ This template comprises the creation of a subaccount, its contained resources an
 The basic setup comprises the following resources:
 
 - A SAP BTP subaccount
-- Assignment of Entitlements for Services
-- Creation of Service Instances and Subscriptions (if defined)
-- Assignment of Subaccount Administrator, Subaccount Viewer and Cloud Foundry roles.
-- Creation of Destinations (if defined)
+- Assignment of *entitlements* for services
+- Creation of *service instances* and *subscriptions* (if defined)
+- Assignment of *subaccount administrator*, *subaccount viewer* and *Cloud Foundry* specific *roles*.
+- Creation of *destinations* (if defined)
 
 ## Contained services and applications
 
-| Resource name | Technical Name | Plan |  Quota | Create service instance/subscription |
+| Resource name | Technical Name | Plan |  Quota | Create service instance/subscription
 | --- | --- | --- | --- | ---
 | Application Logging Service | `application-logs` | `lite` | 2 units | yes
 | Destination Service | `destination` | `lite` | 2 units | yes

@@ -1,12 +1,12 @@
 ###
-# Common Provider configuration
+# Common Provider authentication configuration
+# This could also be provided as environment variables: https://registry.terraform.io/providers/SAP/btp/latest/docs#optional
 ###
-
 variable "username" {
   type        = string
   description = "Your username for the SAP BTP global account and for Cloud Foundry environment."
   default     = "btp_username"
-}   
+}
 
 variable "password" {
   type        = string
@@ -17,7 +17,6 @@ variable "password" {
 ###
 # BTP Provider configuration
 ###
-
 variable "globalaccount" {
   type        = string
   description = "The subdomain of the SAP BTP global account."
@@ -26,8 +25,8 @@ variable "globalaccount" {
 
 ###
 # Cloud Foundry Provider configuration
+# The API URL might not be the same for all regions and extension landscapes
 ###
-
 variable "api_url" {
   type        = string
   description = "The API Endpoint URL of the Cloud Foundry environment instance."
@@ -65,24 +64,24 @@ variable "region" {
 ###
 variable "entitlement_services" {
   type = list(object({
-    name   = string
-    plan   = string
-    amount = number
+    name            = string
+    plan            = string
+    amount          = number
     create_instance = bool
   }))
   description = "List of entitlements of service instances for the subaccount."
-  default = []
+  default     = []
 }
 
 variable "entitlement_subscriptions" {
   type = list(object({
-    name   = string
-    plan   = string
-    amount = number
+    name                = string
+    plan                = string
+    amount              = number
     create_subscription = bool
   }))
   description = "List of entitlements of service subscriptions for the subaccount."
-  default = []
+  default     = []
 }
 
 ###
@@ -90,11 +89,11 @@ variable "entitlement_subscriptions" {
 ###
 variable "instances" {
   type = list(object({
-    name     = string
-    plan     = string
+    name = string
+    plan = string
   }))
   description = "List of service instances to be created to in the subaccount."
-  default = []
+  default     = []
 }
 
 
@@ -107,7 +106,7 @@ variable "subscriptions" {
     plan     = string
   }))
   description = "List of service subscriptions to be subscribed to in the subaccount."
-  default = []
+  default     = []
 }
 
 ###
@@ -115,17 +114,16 @@ variable "subscriptions" {
 ###
 
 variable "cloudfoundry_spaces" {
-  type = set(string)
+  type        = set(string)
   description = "List of Cloud Foundry spaces to be created in the subaccount."
-  default = ["dev"]
+  default     = ["dev"]
 }
 
 ###
 # Authorization
 ###
-
 variable "subaccount_administrator_users" {
-  type = set(string)
+  type        = set(string)
   description = "List of users to be assigned the Role Collection 'Subaccount Administrator'."
 }
 
@@ -138,7 +136,7 @@ variable "subaccount_administrator_user_groups" {
 }
 
 variable "subaccount_viewer_users" {
-  type = set(string)
+  type        = set(string)
   description = "List of users to be assigned the Role Collection 'Subaccount Viewer'."
 }
 

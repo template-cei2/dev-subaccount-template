@@ -2,10 +2,11 @@
 # Setup of names in accordance to the company's naming conventions
 ###
 locals {
-  project_subaccount_name   = "${var.subaccount_name}"
+  project_subaccount_name   = var.subaccount_name
   project_subaccount_domain = lower(replace("${var.subaccount_name}", " ", "-"))
   project_subaccount_cf_org = replace("${var.subaccount_name}", " ", "-")
 }
+
 
 ###
 # Creation of subaccount
@@ -14,8 +15,9 @@ resource "btp_subaccount" "project" {
   name      = local.project_subaccount_name
   subdomain = local.project_subaccount_domain
   region    = lower(var.region)
-  usage = "NOT_USED_FOR_PRODUCTION"
+  usage     = "NOT_USED_FOR_PRODUCTION"
 }
+
 
 ###
 # Assignment of entitlements
@@ -32,6 +34,7 @@ resource "btp_subaccount_entitlement" "entitlements" {
   amount        = each.value.amount
 }
 
+
 ###
 # Creation of environment instance
 ###
@@ -43,11 +46,9 @@ resource "btp_subaccount_environment_instance" "cloudfoundry" {
   service_name     = "cloudfoundry"
   plan_name        = "standard"
   landscape_label  = "cf-eu10"
-
-
   parameters = jsonencode({
     instance_name = local.project_subaccount_cf_org
-    
+
   })
 }
 
@@ -62,8 +63,8 @@ resource "cloudfoundry_org_users" "cf_org_users" {
 
 resource "cloudfoundry_space" "cf_spaces" {
   for_each = var.cloudfoundry_spaces
-  name = each.key
-  org  = btp_subaccount_environment_instance.cloudfoundry.platform_id
+  name     = each.key
+  org      = btp_subaccount_environment_instance.cloudfoundry.platform_id
 }
 
 
@@ -84,8 +85,8 @@ data "btp_subaccount_service_plan" "service_instance_plans" {
 }
 
 resource "btp_subaccount_service_instance" "instances" {
-  for_each          = data.btp_subaccount_service_plan.service_instance_plans
-  name              = data.btp_subaccount_service_plan.service_instance_plans[each.key].offering_name
+  for_each       = data.btp_subaccount_service_plan.service_instance_plans
+  name           = data.btp_subaccount_service_plan.service_instance_plans[each.key].offering_name
   serviceplan_id = data.btp_subaccount_service_plan.service_instance_plans[each.key].id
   subaccount_id  = btp_subaccount.project.id
   depends_on     = [data.btp_subaccount_service_plan.service_instance_plans]
@@ -126,6 +127,7 @@ resource "btp_subaccount_role_collection_assignment" "subaccount_admins_user_gro
     for index, user_group in var.subaccount_administrator_user_groups :
     index => user_group
   }
+
   subaccount_id        = btp_subaccount.project.id
   role_collection_name = "Subaccount Administrator"
   group_name           = each.value.name
@@ -144,6 +146,7 @@ resource "btp_subaccount_role_collection_assignment" "subaccount_viewers_user_gr
     for index, user_group in var.subaccount_viewer_user_groups :
     index => user_group
   }
+
   subaccount_id        = btp_subaccount.project.id
   role_collection_name = "Subaccount Viewer"
   group_name           = each.value.name
